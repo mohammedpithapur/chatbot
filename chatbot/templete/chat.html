@@ -7,14 +7,14 @@
   {% load static %}
   <link rel="stylesheet" href="{% static "style.css" %}">
 </head>
-<body>
-  <div class="chatbot">
+<body style="background-color:rgb(71, 66, 66);">
+  <div class="chatbot" style="background-color: rgb(226, 215, 215);">
     <div class="chat-header">
       <h1>Chatbot</h1>
     </div>
     <div class="chat-window">
       <div class="chat-message user">
-        <p>{{chats.userinput}}</p>
+        <p>{{chats}}</p>
       </div>
       <div class="chat-message bot">
         <p>{{botreply}}</p>
@@ -31,7 +31,7 @@
       
     
   </div>
-
+  <a href="{% url "session" %}"><button type="submit" value="submit">Session</button></a>
 
 </body>
 </html>
