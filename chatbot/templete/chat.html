@@ -5,33 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static "style.css" %}">
+  <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .chatbot {
+      max-width: 500px;
+      margin: 50px auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+    }
+
+    .chat-header {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .chat-window {
+      height: 280px;
+      overflow-y: scroll;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .chat-message.user {
+      background-color: #eee;
+    }
+
+    .chat-message.bot {
+      background-color: #fff;
+    }
+
+    .chat-input {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+  </style>
 </head>
 <body style="background-color:rgb(71, 66, 66);">
   <div class="chatbot" style="background-color: rgb(226, 215, 215);">
     <div class="chat-header">
       <h1>Chatbot</h1>
     </div>
-    <div class="chat-window">
+    <div class="chat-window" id="chat-window">
+      {% for i in chats %}
       <div class="chat-message user">
-        <p>{{chats}}</p>
+        <p>{{i.chathistory.person}}</p>
       </div>
       <div class="chat-message bot">
-        <p>{{botreply}}</p>
+        <p>{{i.chathistory.response}}</p>
       </div>
+      {% endfor %}
     </div>
     
-      <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="chat-input">
-        <input type="text" name='user-msg' placeholder="Say something...">
+    <form id="chat-form" action="" method="POST" enctype="multipart/form-data" autocomplete="new-form">
+      {% csrf_token %}
+      <div class="chat-input">
+        <input id="user-msg" type="text" name='user-msg' placeholder="Say something..." autocomplete="off">
         <button type="submit" value="submit">Send</button>
       </div>
     </form>
-      
-    
   </div>
   <a href="{% url "session" %}"><button type="submit" value="submit">Session</button></a>
 
+  <!-- JavaScript to scroll chat window to bottom and clear input field -->
+  <script>
+    function scrollToBottom() {
+      var chatWindow = document.getElementById('chat-window');
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Scroll to bottom and clear input field after a short delay
+    window.onload = function() {
+      scrollToBottom();
+      setTimeout(function() {
+        document.getElementById('user-msg').value = ''; // Clear input field after a delay
+      }, 100);
+    };
+
+    // Scroll to bottom when a new message is added
+    document.getElementById('chat-form').addEventListener('submit', function() {
+      setTimeout(scrollToBottom, 500); // Delay to allow time for the message to be added
+    });
+  </script>
 </body>
 </html>

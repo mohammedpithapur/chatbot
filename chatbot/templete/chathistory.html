@@ -1,22 +1,106 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
   {% load static %}
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load static %}
-    <link rel="stylesheet" href="{% static "style.css" %}">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="{% static "css/base.css" %}"> -->
-  </head>
-  <body>
-    {% for i in session %}
-    <li>{{i.chathistory}}</li>
-    {% endfor %}
+  <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    .chatbot {
+      max-width: 500px;
+      margin: 50px auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+    }
 
+    .chat-header {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .chat-window {
+      height: 280px;
+      overflow-y: scroll;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .chat-message.user {
+      background-color: #eee;
+    }
+
+    .chat-message.bot {
+      background-color: #fff;
+    }
+
+    .chat-input {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body style="background-color:rgb(71, 66, 66);">
+  <div class="chatbot" style="background-color: rgb(226, 215, 215);">
+    <div class="chat-header">
+      <h1>Chat History</i></h1>
+    </div>
+    <div class="chat-window" id="chat-window">
+      {% for i in session %}
+      <div class="chat-message user">
+        <p>{{i.chathistory.person}}</p>
+      </div>
+      <div class="chat-message bot">
+        <p>{{i.chathistory.response}}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <script>
+      function scrollToBottom() {
+        var chatWindow = document.getElementById('chat-window');
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+  
+      // Scroll to bottom and clear input field after a short delay
+      window.onload = function() {
+        scrollToBottom();
+      };
+  
+      // Scroll to bottom when a new message is added
+      document.getElementById('chat-form').addEventListener('submit', function() {
+        setTimeout(scrollToBottom, 500); // Delay to allow time for the message to be added
+      });
+    </script>
   </body>
 </html>

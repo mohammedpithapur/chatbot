@@ -1,22 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Keys</title>
   {% load static %}
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load static %}
-  <link rel="stylesheet" href="{% static "style.css" %}">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="{% static "css/base.css" %}"> -->
-  </head>
-  <body>
-    {% for i in session %}
-    <li><a href="{% url "chat_history" i.session_key %}">{{i.session_key}}</a></li>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1,h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .session-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .session-item {
+      margin-bottom: 10px;
+    }
+    .session-link {
+      display: block;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+    .session-link:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Session Keys</h1>
+  <ul class="session-list">
+    <h2>Recent Keys</h2>
+    {% for key in recent_keys %}
+      <li class="session-item">
+        <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
+      </li>
+    {% empty %}
+      <li>No sessions available</li>
     {% endfor %}
+  </ul>
+  <ul class="session-list">
+    <h2>Old Keys</h2>
+    {% for key in old_keys %}
+      <li class="session-item">
+        <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
+      </li>
+    {% empty %}
+      <li>No sessions available</li>
+    {% endfor %}
+  </ul>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-  </body>
+</body>
 </html>
