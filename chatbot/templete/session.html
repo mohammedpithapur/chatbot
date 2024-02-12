@@ -99,55 +99,70 @@
       padding: 5px 10px;
       cursor: pointer;
     }
+    .wrapper {
+      display: flex;
+    }
+    
+    .container {
+      flex: 1;
+    }
+    
+    .chatbot {
+      flex: 1;
+      height: 400px;
+      background-color: rgb(226, 215, 215);
+    }
 
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Session Keys</h1>
-    <div class="session-list">
-      <h2>Recent Keys</h2>
-      <ul>
-        {% for key in recent_keys %}
-          <li class="session-item">
-            <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
-          </li>
-        {% empty %}
-          <li>No sessions available</li>
-        {% endfor %}
-      </ul>
+  <div class="wrapper">
+    <div class="container">
+      <h1>Session Keys</h1>
+      <div class="session-list">
+        <h2>Recent Keys</h2>
+        <ul>
+          {% for key in recent_keys %}
+            <li class="session-item">
+              <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
+            </li>
+          {% empty %}
+            <li>No sessions available</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="session-list">
+        <h2>Old Keys</h2>
+        <ul>
+          {% for key in old_keys %}
+            <li class="session-item">
+              <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
+            </li>
+          {% empty %}
+            <li>No sessions available</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <div class="session-list">
-      <h2>Old Keys</h2>
-      <ul>
-        {% for key in old_keys %}
-          <li class="session-item">
-            <a href="{% url 'chat_history' key %}" class="session-link">{{ key }}</a>
-          </li>
-        {% empty %}
-          <li>No sessions available</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-  <div class="chatbot" style="background-color: rgb(226, 215, 215);">
-    <div class="chat-header">
-      <h1>Chat History</h1>
-    </div>
-    <div class="chat-window" id="chat-window">
-      {% if sessionhistory %}
-        {% for i in sessionhistory %}
-          <div class="chat-message user">
-            <p>{{i.person}}</p>
-          </div>
-          <div class="chat-message bot">
-            <p>{{i.response}}</p>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p>Click on a session you want to view</p>
-      {% endif %}
+    <div class="chatbot" style="background-color: rgb(226, 215, 215);">
+      <div class="chat-header">
+        <h1>Chat History</h1>
+      </div>
+      <div class="chat-window" id="chat-window">
+        {% if sessionhistory %}
+          {% for i in sessionhistory %}
+            <div class="chat-message user">
+              <p>{{i.chathistory.person}}</p>
+            </div>
+            <div class="chat-message bot">
+              <p>{{i.chathistory.response}}</p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>Click on a session you want to view</p>
+        {% endif %}
+      </div>
     </div>
   </div>
   

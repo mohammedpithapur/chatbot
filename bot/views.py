@@ -1,12 +1,10 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 from .models import ChatModel
 from random import choice
 from english_words import english_words_set
 from django.http import HttpRequest
 from django.utils import timezone
 from datetime import timedelta
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 english_words_list = list(english_words_set)
 def my_form(request: HttpRequest):
     if 'conversations' not in request.session:
@@ -29,7 +27,6 @@ def my_form(request: HttpRequest):
     return render(request, 'chat.html', {'chats': request.session['conversations']})
 
 def chat_session(request, session_key=None):
-    request.session.set_expiry(0)
     chat_entries = ChatModel.objects.order_by('-time')
 
     keys_set = set()
@@ -58,7 +55,7 @@ def chat_session(request, session_key=None):
         })
     else:
          sessionhistory = ChatModel.objects.filter(session_key=session_key)
-        #  context={per}
+         print(sessionhistory)
          return render(request, 'session.html',{
             'recent_keys': recent_keys,
             'old_keys': old_keys,
