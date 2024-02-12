@@ -1,51 +1,41 @@
-
-import imp
 from django.shortcuts import render,redirect
 from .models import ChatModel
 from random import choice
 from english_words import english_words_set
 from django.http import HttpRequest
-import datetime
-import json
 from django.utils import timezone
 from datetime import timedelta
-# Create your views here.
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 english_words_list = list(english_words_set)
 def my_form(request: HttpRequest):
-    request.session.set_expiry(0)
-    msges = None
+    if 'conversations' not in request.session:
+        request.session['conversations']=[]
     if request.method == "POST":
         msg = request.POST.get('user-msg')
         if msg:
             random_word = choice(english_words_list)
             bot = f"{msg} {random_word}"
-
-            
+            request.session['conversations'].append({'message': msg, 'response': bot})
+            request.session.modified = True            
             session_key = request.session.session_key
             chat_data = {
                         "person": msg,
                         "response": bot,
                         'session_key': session_key
-                 } 
+                 }           
             objects=ChatModel(chathistory=chat_data,session_key=session_key)
             objects.save()
-            msges=ChatModel.objects.filter(chathistory__session_key=session_key)
-        else:
-                # Handle the case where no matching objects are found
-            msges=None
-    return render(request, 'chat.html', {'chats': msges})
+    return render(request, 'chat.html', {'chats': request.session['conversations']})
 
-def chat_session(request: HttpRequest):
-
+def chat_session(request, session_key=None):
+    request.session.set_expiry(0)
     chat_entries = ChatModel.objects.order_by('-time')
 
     keys_set = set()
-
-    # Categorize keys as "recent" or "old"
     recent_keys = []
     old_keys = []
     for entry in chat_entries:
-        # Check if the session key is already in the respective set
         if entry.session_key not in keys_set and entry.time >= (timezone.now() - timedelta(days=2)):
             keys_set.add(entry.session_key)
             recent_keys.append(entry.session_key)
@@ -57,13 +47,21 @@ def chat_session(request: HttpRequest):
         'recent_keys': recent_keys,
         'old_keys': old_keys,
     }
-    print(recent_keys)
-    return render(request, 'session.html',{
-        'recent_keys': recent_keys,
-        'old_keys': old_keys,
-        'keys':chat_entries,
-    })
-def chat_history(request: HttpRequest, session_key):
-    if request.method == "GET":
-        sessionhistory=ChatModel.objects.filter(session_key=session_key)
-    return render(request, 'chathistory.html',{'session':sessionhistory})
+
+
+    if session_key is None:
+        sessionhistory=None
+        return render(request, 'session.html', {
+            'recent_keys': recent_keys,
+            'old_keys': old_keys,
+            'keys': chat_entries,
+        })
+    else:
+         sessionhistory = ChatModel.objects.filter(session_key=session_key)
+        #  context={per}
+         return render(request, 'session.html',{
+            'recent_keys': recent_keys,
+            'old_keys': old_keys,
+            'keys': chat_entries,
+            'sessionhistory':sessionhistory
+        })

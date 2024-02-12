@@ -79,10 +79,10 @@
     <div class="chat-window" id="chat-window">
       {% for i in chats %}
       <div class="chat-message user">
-        <p>{{i.chathistory.person}}</p>
+        <p>{{i.message}}</p>
       </div>
       <div class="chat-message bot">
-        <p>{{i.chathistory.response}}</p>
+        <p>{{i.response}}</p>
       </div>
       {% endfor %}
     </div>
