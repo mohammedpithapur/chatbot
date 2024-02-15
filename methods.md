@@ -2,6 +2,7 @@ I
 1. Using Django's Messages Framework: Django provides a built-in messages framework that allows you to display messages to users after a request is processed. To use this framework, you need to add `Django.contrib.messages.middleware.Message-middleware` to your `MIDDLEWARE` settings and add `Django.contrib.messages` to your `INSTALLED_APPS`. Then, you can add messages in your views using the `messages` module. For example:
 
 CODE:
+
 from Django.contrib import messages
 
 def my_view(request):
@@ -10,7 +11,9 @@ def my_view(request):
     # or
     messages.error(request, 'Error message.')
 
+
 In your HTML templates, you can render these messages using something like:
+
 
 {% if messages %}
     <ul class="messages">
@@ -20,16 +23,21 @@ In your HTML templates, you can render these messages using something like:
     </ul>
 {% endif %}
 
+
 2.Using Context Variables: You can pass success and error messages as context variables from your views to your templates and then display them directly in your HTML.
 
 CODE:
+
+
 def my_view(request):
     # Some processing
     success_message = "Success message."
     error_message = "Error message."
     return render(request, 'my_template.html', {'success_message': success_message, 'error_message': error_message})
 
+
 And in your HTML template:
+
 
 {% if success_message %}
     <p class="success">{{ success_message }}</p>
@@ -49,6 +57,7 @@ And in your HTML template:
 
 
 3.Using AJAX : You can use JavaScript to handle form submissions asynchronously and display success or error messages dynamically without reloading the entire page.
+
 
 
 <!DOCTYPE html>
