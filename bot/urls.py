@@ -7,5 +7,4 @@ urlpatterns = [
     path('', my_form, name='chatbot'),
     path('session/', chat_session, name='session'),
     path('session/<str:session_key>/', chat_session, name='chat_history'),
-    
 ]

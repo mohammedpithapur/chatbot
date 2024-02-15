@@ -55,7 +55,7 @@ ROOT_URLCONF = 'chatbot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['chatbot/templete'],
+        'DIRS': ['templete'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +118,7 @@ USE_TZ = True
 import os
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bot/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # VENV_PATH = os.path.dirname(BASE_DIR)
 # STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
 

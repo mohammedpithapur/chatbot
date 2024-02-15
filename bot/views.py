@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from requests import delete, session
 from .models import ChatModel
 from random import choice
 from english_words import english_words_set
@@ -7,11 +8,21 @@ from django.utils import timezone
 from datetime import timedelta
 english_words_list = list(english_words_set)
 def my_form(request: HttpRequest):
+    request.session.set_expiry(300)
     if 'conversations' not in request.session:
         request.session['conversations']=[]
+    
     if request.method == "POST":
         msg = request.POST.get('user-msg')
+        reset=request.POST.get("reset")
+        print(reset)
+        if reset:
+            print(reset)
+            request.session.delete()
+            request.session.create()
+            
         if msg:
+            print(reset)
             random_word = choice(english_words_list)
             bot = f"{msg} {random_word}"
             request.session['conversations'].append({'message': msg, 'response': bot})
@@ -22,8 +33,8 @@ def my_form(request: HttpRequest):
                         "response": bot,
                         'session_key': session_key
                  }           
-            objects=ChatModel(chathistory=chat_data,session_key=session_key)
-            objects.save()
+            ChatModel.objects.create(chathistory=chat_data,session_key=session_key)
+        
     return render(request, 'chat.html', {'chats': request.session['conversations']})
 
 def chat_session(request, session_key=None):
@@ -39,12 +50,6 @@ def chat_session(request, session_key=None):
         elif entry.session_key not in keys_set:
             keys_set.add(entry.session_key)
             old_keys.append(entry.session_key)
-
-    context = {
-        'recent_keys': recent_keys,
-        'old_keys': old_keys,
-    }
-
 
     if session_key is None:
         sessionhistory=None
@@ -62,3 +67,7 @@ def chat_session(request, session_key=None):
             'keys': chat_entries,
             'sessionhistory':sessionhistory
         })
+    
+# def resetsession(request: HttpRequest):
+    
+#     return redirect('chatbot')

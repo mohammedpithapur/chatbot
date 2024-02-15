@@ -1,75 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot</title>
-  {% load static %}
-  <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .chatbot {
-      max-width: 500px;
-      margin: 50px auto;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 20px;
-    }
-
-    .chat-header {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .chat-window {
-      height: 280px;
-      overflow-y: scroll;
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-    }
-
-    .chat-message {
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    .chat-message.user {
-      background-color: #eee;
-    }
-
-    .chat-message.bot {
-      background-color: #fff;
-    }
-
-    .chat-input {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-    }
-
-    input {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      padding: 5px;
-    }
-
-    button {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
-  </style>
+  
+  <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body style="background-color:rgb(71, 66, 66);">
   <div class="chatbot" style="background-color: rgb(226, 215, 215);">
@@ -95,7 +32,8 @@
       </div>
     </form>
   </div>
-  <a href="{% url "session" %}"><button type="submit" value="submit">Session</button></a>
+  <a href="{% url 'session' %}"><button type="submit" value="submit">Session</button></a>
+  <a href="{% url 'chatbot' %}"><button id="reset" name='reset' type="submit" value="reset">Reset Session</button></a>
 
   <!-- JavaScript to scroll chat window to bottom and clear input field -->
   <script>
@@ -109,7 +47,7 @@
       scrollToBottom();
       setTimeout(function() {
         document.getElementById('user-msg').value = ''; // Clear input field after a delay
-      }, 100);
+      });
     };
 
     // Scroll to bottom when a new message is added
